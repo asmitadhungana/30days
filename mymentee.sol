@@ -4,7 +4,7 @@ contract MyMentee {
     
     string name;
     
-    function mentee(string memory _name) public returns(string memory){
+    function mentee(string memory _name) public returns(string storage){
         name = _name;
         return name;
     }
