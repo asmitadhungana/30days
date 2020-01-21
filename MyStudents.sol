@@ -31,5 +31,8 @@ contract MyStudents {
     function incrementCount() internal {
         stdCount += 1;
     }
-
+    
+    function getMarks(uint _roll) public view returns (uint) {
+        return students[_roll].marks;
+    }
 }
