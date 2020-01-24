@@ -13,8 +13,11 @@ contract Election {
         uint vote;
     }
     
+    address[] public adminsArr;
+    
     address public owner;
     string public electionName;
+    
     
     mapping(address => Voter) public voters;
     Candidate[] public candidates;
@@ -25,12 +28,27 @@ contract Election {
         _;
     }
     
+    modifier adminsOnly(){
+        address temp;
+        for (uint i=0; i<adminsArr.length; i++) {
+         if(msg.sender == adminsArr[i]){
+             temp = adminsArr[i];
+         }  
+         require (msg.sender == temp);
+        }
+        _;
+    }
+    
     constructor(string memory _name) public{
         owner = msg.sender;
         electionName = _name;
     }
     
-    function addCandidate(string memory _name) ownerOnly public {
+    function addAdmins(address _adminAddress) ownerOnly public {
+        adminsArr.push(_adminAddress);
+    }
+    
+    function addCandidate(string memory _name) adminsOnly public {
         candidates.push(Candidate(_name, 0));
     }
     
@@ -38,7 +56,7 @@ contract Election {
         return candidates.length;
     }
     
-    function authorize(address _person) ownerOnly public {
+    function authorize(address _person) adminsOnly public {
         voters[_person].isAuthorized = true;
     }
     
